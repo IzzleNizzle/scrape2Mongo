@@ -5,16 +5,11 @@ var mongoose = require("mongoose");
 
 var PORT = 3000;
 
-// Requiring the `User` model for accessing the `users` collection
-var User = require("./userModel.js");
-
 // Initialize Express
 var app = express();
 
 // Configure middleware
 
-// Use morgan logger for logging requests
-app.use(logger("dev"));
 // Use body-parser for handling form submissions
 app.use(bodyParser.urlencoded({ extended: true }));
 // Use express.static to serve the public folder as a static directory
@@ -30,31 +25,11 @@ mongoose.connect(MONGODB_URI);
 
 
 
-
-
-
-
-
 // Routes
+// **************************************************
+require("./routes/api-routes.js")(app);
+require("./routes/html-routes.js")(app);
 
-// Route to post our form submission to mongoDB via mongoose
-app.post("/submit", function (req, res) {
-	// Create a new user using req.body
-
-	var user = new User(req.body);
-	user.setFullName();
-	user.lastUpdatedDate();
-
-	User.create(user)
-		.then(function (dbUser) {
-			// If saved successfully, send the the new User document to the client
-			res.json(dbUser);
-		})
-		.catch(function (err) {
-			// If an error occurs, send the error to the client
-			res.json(err);
-		});
-});
 
 // Start the server
 app.listen(PORT, function () {
