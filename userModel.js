@@ -16,6 +16,13 @@ var PostSchema = new Schema({
 		type: String,
 		trim: true,
 		required: "Link is Required"
+	},
+	saved: {
+		type: Boolean,
+		default: false
+	},
+	comments: {
+		array: []
 	}
 
 });

@@ -14,7 +14,7 @@ module.exports = function (app) {
   // Routes
 
   // Route for scraping the latest posts
-  app.get("/scrape", function (req, res) {
+  app.get("/api/scrape", function (req, res) {
 
     // Defining data object that I will fill from scraping the page
     let objects = [];
@@ -70,14 +70,50 @@ module.exports = function (app) {
   });
 
   // Route for getting scraped data from the database
-  app.get("/data", function(req, res){
+  app.get("/api/data", function(req, res){
     Post.find(function (err, posts) {
       if (err) return console.error(err);
-      console.log(posts);
+      res.send(posts);
     })
-    
-    // res.send(data);
   });
+
+  // route to find post by id
+  app.get("/api/:id", function(req, res){
+    Post.find({ _id: req.params.id }, function (err, post) {
+      if (err) return console.error(err);
+      res.send(post);
+    })
+  });
+  // route to change post to saved
+  app.put("/api/saved/:id", function(req, res){
+    Post.findByIdAndUpdate(req.params.id, { $set: { saved: true }}, function (err, post) {
+      if (err) return console.error(err);
+      res.send(post);
+    })
+  });
+
+  // route to change post to unsaved
+  app.put("/api/unsaved/:id", function(req, res){
+    Post.findByIdAndUpdate(req.params.id, { $set: { saved: false }}, function (err, post) {
+      if (err) return console.error(err);
+      res.send(post);
+    })
+  });
+
+  // route to add comment to post
+  // TODO, THIS SITLL ISN'T WORKING
+  app.post("/api/addcomment/:id", function(req, res){
+    console.log(req.body);
+    
+    Post.findByIdAndUpdate(req.params.id, { $push: { array: req.body } }, function (err, post) {
+      if (err) return console.error(err);
+      res.send(post);
+    })
+  });
+  // route to delete comment from post
+
+
+
 
 
   // Route to post our form submission to mongoDB via mongoose
