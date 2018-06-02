@@ -16,3 +16,15 @@ h4 {
   border-bottom: 1px black solid;
   padding-bottom: 4px;
 }
+.saved {
+  position: absolute;
+  right: 45px;
+  top: 50px;
+}
+.save {
+  right: 20px;
+  position: absolute;
+}
+.panel-heading {
+  position: relative;
+}

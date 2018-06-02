@@ -5,29 +5,24 @@ var Schema = mongoose.Schema;
 
 // Using the Schema constructor, create a new PostSchema object
 // This is similar to a Sequelize model
-var PostSchema = new Schema({
+var CommentSchema = new Schema({
 
-	title: {
+	comment: {
 		type: String,
 		trim: true,
-		required: "Title is Required"
+		required: "comment is Required"
 	},
-	link: {
+	article: {
 		type: String,
 		trim: true,
-		required: "Link is Required"
-	},
-	saved: {
-		type: Boolean,
-		default: false
-	},
-	comments: []
+		required: "Article is Required"
+	}
 
 });
 
 
 // This creates our model from the above schema, using mongoose's model method
-var Post = mongoose.model("Post", PostSchema);
+var Comment = mongoose.model("Comment", CommentSchema);
 
-// Export the Post model
-module.exports = Post;
+// Export the Comment model
+module.exports = Comment;

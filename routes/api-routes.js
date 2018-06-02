@@ -5,7 +5,8 @@ var cheerio = require("cheerio");
 var request = require("request");
 // Requiring the `Post` model for accessing the `Posts` collection
 var Post = require("../userModel.js");
-
+// Requiring the `Comment` model for accessing the `Comments` collection
+var Comment = require("../commentModel.js");
 // Routes
 // =============================================================
 module.exports = function (app) {
@@ -70,66 +71,96 @@ module.exports = function (app) {
   });
 
   // Route for getting scraped data from the database
-  app.get("/api/data", function(req, res){
+  app.get("/api/data", function (req, res) {
     Post.find(function (err, posts) {
       if (err) return console.error(err);
       res.send(posts);
     })
   });
 
-  // route to find post by id
-  app.get("/api/:id", function(req, res){
+  // Route for getting only Saved Articles
+  app.get("/api/saved", function (req, res) {
+    Post.find({ saved: true }, function (err, post) {
+      if (err) return console.error(err);
+      res.send(post);
+    })
+  });
+
+  // Route to find post by id
+  app.get("/api/:id", function (req, res) {
     Post.find({ _id: req.params.id }, function (err, post) {
       if (err) return console.error(err);
       res.send(post);
     })
   });
-  // route to change post to saved
-  app.put("/api/saved/:id", function(req, res){
-    Post.findByIdAndUpdate(req.params.id, { $set: { saved: true }}, function (err, post) {
+
+  // Route to change post to saved
+  app.put("/api/saved/:id", function (req, res) {
+    Post.findByIdAndUpdate(req.params.id, { $set: { saved: true } }, function (err, post) {
       if (err) return console.error(err);
       res.send(post);
     })
   });
 
-  // route to change post to unsaved
-  app.put("/api/unsaved/:id", function(req, res){
-    Post.findByIdAndUpdate(req.params.id, { $set: { saved: false }}, function (err, post) {
+  // Route to change post to unsaved
+  app.put("/api/unsaved/:id", function (req, res) {
+    Post.findByIdAndUpdate(req.params.id, { $set: { saved: false } }, function (err, post) {
       if (err) return console.error(err);
       res.send(post);
     })
   });
 
-  // route to add comment to post
-  // TODO, THIS SITLL ISN'T WORKING
-  app.post("/api/addcomment/:id", function(req, res){
-    console.log(req.body);
-    
-    Post.findByIdAndUpdate(req.params.id, { $push: { array: req.body } }, function (err, post) {
-      if (err) return console.error(err);
-      res.send(post);
-    })
-  });
-  // route to delete comment from post
+  // Route to add comment to post
+  app.post("/api/addcomment", function (req, res) {
+
+    // Post.findByIdAndUpdate(req.params.id, { $push: { comments: req.body.comment } }, function (err, post) {
+    //   if (err) return console.error(err);
+    //   res.send(post);
+    // })
 
 
-
-
-
-  // Route to post our form submission to mongoDB via mongoose
-  app.post("/submit", function (req, res) {
     // Create a new user using req.body
-    let post = new Post(object[i]);
+    let comment = new Comment(req.body);
 
-    Post.create(post)
-      .then(function (dbUser) {
+    Comment.create(comment)
+      .then(function (dbComment) {
         // If saved successfully, send the the new User document to the client
-        res.json(dbUser);
+        res.json(dbComment);
       })
       .catch(function (err) {
         // If an error occurs, send the error to the client
         res.json(err);
       });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  });
+
+  // Route to delete comment from post
+  app.delete("/api/deletecomment/:id", function (req, res) {
+    Comment.findByIdAndDelete(req.params.id, function (err, post) {
+      if (err) return console.error(err);
+      res.send(post);
+    })
+  });
+
+  // Route to find all comments for a particular article
+  app.get("/api/comments/:id", function (req, res) {
+    Comment.find({ article: req.params.id }, function (err, comment) {
+      if (err) return console.error(err);
+      res.send(comment);
+    })
   });
 
 };
