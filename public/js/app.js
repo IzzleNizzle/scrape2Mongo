@@ -168,7 +168,26 @@ function activateDOM() {
   // On click function for .save buttons to change to a checkmark when saved
   $('.btnSave').on('click', function () {
     // $(this).html("<span class='glyphicon glyphicon-ok saved'>Saved</span>");
+    // This changes the button to a glyphicon showing checked
     $(this).attr('class', 'glyphicon glyphicon-ok saved');
     $(this).text('Saved');
+
+    // On click function for saved button that will send ajax call to server stating the id has been 'saved'
+    // get article id from data of the button
+    let articleID = $(this).parents(".panel").data("_id");
+    // ajax call saving article by article
+    // put jquery call needs to be updated
+    $.put('/api/saved/' + articleID);
+    console.log($(this).parents(".panel").data("_id"));
   })
+}
+
+// On click function for saved button that will send ajax call to server stating the id has been 'saved'
+function saveArticle() {
+
+  // get article id from data of the button
+  console.log($(this).parents(".panel").data());
+  
+  // ajax call saving article by article
+
 }
