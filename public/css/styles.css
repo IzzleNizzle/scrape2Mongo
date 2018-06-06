@@ -28,3 +28,19 @@ h4 {
 .panel-heading {
   position: relative;
 }
+.delete {
+  position: absolute;
+  right: 150px;
+}
+.deleted {
+  position: absolute;
+  right: 155px;
+  top: 55px;
+}
+.notes {
+  position: absolute;
+  right: 21px;
+}
+.note-delete {
+  margin-left: 11px;
+}

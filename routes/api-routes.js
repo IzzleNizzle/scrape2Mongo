@@ -95,7 +95,7 @@ module.exports = function (app) {
   });
 
   // Route to change post to saved
-  app.put("/api/saved/:id", function (req, res) {
+  app.post("/api/saved/:id", function (req, res) {
     Post.findByIdAndUpdate(req.params.id, { $set: { saved: true } }, function (err, post) {
       if (err) return console.error(err);
       res.send(post);
@@ -103,7 +103,7 @@ module.exports = function (app) {
   });
 
   // Route to change post to unsaved
-  app.put("/api/unsaved/:id", function (req, res) {
+  app.post("/api/unsaved/:id", function (req, res) {
     Post.findByIdAndUpdate(req.params.id, { $set: { saved: false } }, function (err, post) {
       if (err) return console.error(err);
       res.send(post);
@@ -112,12 +112,6 @@ module.exports = function (app) {
 
   // Route to add comment to post
   app.post("/api/addcomment", function (req, res) {
-
-    // Post.findByIdAndUpdate(req.params.id, { $push: { comments: req.body.comment } }, function (err, post) {
-    //   if (err) return console.error(err);
-    //   res.send(post);
-    // })
-
 
     // Create a new user using req.body
     let comment = new Comment(req.body);
@@ -131,19 +125,6 @@ module.exports = function (app) {
         // If an error occurs, send the error to the client
         res.json(err);
       });
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   });
 
